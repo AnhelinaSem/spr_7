@@ -1,7 +1,10 @@
 import requests
+import allure
 from data import BASE_URL, COURIER_URL
 
 
+@allure.description(
+        'Проверяем логин курьера')
 def test_courier_can_login(register_new_courier):
     login, password, _ = register_new_courier
     payload = {

@@ -1,7 +1,11 @@
 import requests
 from data import BASE_URL, COURIER_URL
 from method.methods import delete_courier
+import allure
 
+
+@allure.description(
+        'Проверяем создание курьера')
 def test_create_courier(register_new_courier):
     assert register_new_courier is not None
 

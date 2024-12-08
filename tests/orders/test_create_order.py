@@ -1,5 +1,9 @@
 import pytest
+import allure
 
+
+@allure.description(
+        'Проверяем создание заказа')
 @pytest.mark.parametrize("color", [
     (["BLACK"]),
     (["GREY"]),
