@@ -4,6 +4,7 @@ from src.config import Config
 import requests
 import random
 import string
+from data import BASE_URL, COURIER_URL, ORDERS_URL
 
 @pytest.fixture
 def register_new_courier():
@@ -24,7 +25,7 @@ def register_new_courier():
         "firstName": first_name
     }
 
-    response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier', json=payload)
+    response = requests.post(f'{BASE_URL}{COURIER_URL}', json=payload)
 
     if response.status_code == 201:
         login_pass.append(login)
@@ -48,13 +49,13 @@ def create_order():
             "comment": "Test comment",
             "color": color if color else []
         }
-        response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/orders', json=payload)
+        response = requests.post(f'{BASE_URL}{ORDERS_URL}', json=payload)
         return response
     return _create_order
 
 @pytest.fixture
 def get_orders_list():
-    response = requests.get('https://qa-scooter.praktikum-services.ru/api/v1/orders')
+    response = requests.get(f'{BASE_URL}{ORDERS_URL}')
     return response
 @pytest.fixture
 def driver():
