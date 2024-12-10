@@ -1,6 +1,6 @@
 import requests
 from data import BASE_URL, COURIER_URL
-from method.methods import delete_courier
+
 import allure
 
 
@@ -18,7 +18,8 @@ def test_create_duplicate_courier(register_new_courier):
         "firstName": first_name
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}', json=payload)
-    assert response.status_code == 409, "Этот логин уже используется"
+    assert response.status_code == 409
+    assert response.json().get('message') == "Этот логин уже используется. Попробуйте другой."
 
 
 def test_create_courier_without_required_fields():
@@ -28,7 +29,8 @@ def test_create_courier_without_required_fields():
         "firstName": ""
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}', json=payload)
-    assert response.status_code == 400, "Недостаточно данных для создания учетной записи"
+    assert response.status_code == 400
+    assert response.json().get('message') == "Недостаточно данных для создания учетной записи"
 
 
 def test_create_courier_missing_field():
@@ -36,7 +38,8 @@ def test_create_courier_missing_field():
         "login": "testlogin432",
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}', json=payload)
-    assert response.status_code == 400, "Недостаточно данных для создания учетной записи"
+    assert response.status_code == 400
+    assert response.json().get('message') == "Недостаточно данных для создания учетной записи"
 
 
 def test_create_courier_success_response(register_new_courier):
@@ -53,7 +56,6 @@ def test_create_courier_success_response(register_new_courier):
         response = requests.post(f'{BASE_URL}{COURIER_URL}', json=payload)
     assert response.status_code == 201, f"Курьер не был создан: {response.status_code} - {response.json()}"
     assert response.json() == {"ok": True}, "Ответ не содержит {'ok': True}"
-    assert delete_courier(login, password), "Ошибка при удалении курьера"
 
 
 def test_create_courier_duplicate_login(register_new_courier):
@@ -64,4 +66,5 @@ def test_create_courier_duplicate_login(register_new_courier):
         "firstName": "newname"
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}', json=payload)
-    assert response.status_code == 409, "Этот логин уже используется"
+    assert response.status_code == 409
+    assert response.json().get('message') == "Этот логин уже используется. Попробуйте другой."

@@ -35,6 +35,15 @@ def register_new_courier():
         # возвращаем список
     return login_pass
 
+    def delete_courier(login, password):
+        payload = { "login": login, "password": password }
+        response = requests.post(f'{BASE_URL}{COURIER_URL}/login', json=payload)
+        if response.status_code == 200:
+            courier_id = response.json()['id']
+            del_response = requests.delete(f'{BASE_URL}{COURIER_URL}/{courier_id}')
+            return del_response.status_code == 200
+            return False
+
 @pytest.fixture
 def create_order():
     def _create_order(color=None):

@@ -22,7 +22,8 @@ def test_login_courier_without_required_fields():
         "password": ""
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}/login', json=payload)
-    assert response.status_code == 400, "Недостаточно данных для входа"
+    assert response.status_code == 400
+    assert response.json().get('message') == "Недостаточно данных для входа"
 
 
 def test_login_courier_with_wrong_credentials(register_new_courier):
@@ -32,14 +33,16 @@ def test_login_courier_with_wrong_credentials(register_new_courier):
         "password": "wrongpassword"
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}/login', json=payload)
-    assert response.status_code == 404, "Учетная запись не найдена"
+    assert response.status_code == 404
+    assert response.json().get('message') == "Учетная запись не найдена"
 
     payload = {
         "login": "wronglogin",
         "password": password
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}/login', json=payload)
-    assert response.status_code == 404, "Учетная запись не найдена"
+    assert response.status_code == 404
+    assert response.json().get('message') == "Учетная запись не найдена"
 
 
 def test_login_courier_missing_field():
@@ -53,7 +56,8 @@ def test_login_courier_missing_field():
         "password": "testpassword"
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}/login', json=payload)
-    assert response.status_code == 400, "Недостаточно данных для входа"
+    assert response.status_code == 400
+    assert response.json().get('message') == "Недостаточно данных для входа"
 
 
 def test_login_nonexistent_courier():
@@ -62,7 +66,8 @@ def test_login_nonexistent_courier():
         "password": "nonexistentpassword"
     }
     response = requests.post(f'{BASE_URL}{COURIER_URL}/login', json=payload)
-    assert response.status_code == 404, "Учетная запись не найдена"
+    assert response.status_code == 404
+    assert response.json().get('message') == "Учетная запись не найдена"
 
 
 def test_login_courier_returns_id(register_new_courier):
